@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy",
+    "pages:dev": "npx @cloudflare/next-on-pages --watch",
     "start": "next start",
     "cron": "tsx cron.ts",
     "cron:dev": "tsx --watch cron.ts"
@@ -19,6 +22,7 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
