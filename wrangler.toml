@@ -1,0 +1,14 @@
+name = "content-scheduler-worker"
+compatibility_date = "2025-10-06"
+main = "worker.js"
+
+# Scheduled triggers - runs every 5 minutes to check for posts to publish
+[triggers]
+crons = ["*/5 * * * *"]
+
+# Environment variables (set these in Cloudflare dashboard or via wrangler)
+[vars]
+APP_URL = "https://content-scheduler-cm9xah4qo-akshita-srivastavas-projects.vercel.app"
+
+# Secrets (set these via: wrangler secret put SECRET_NAME)  
+# X_API_KEY = "your-secure-api-key"

@@ -2,49 +2,73 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Post from "../../models/Post";
 
-export async function POST(req: Request) {
+// Simple LinkedIn integration - OAuth routes implemented separately
+
+export async function POST() {
   try {
     await connectDB();
 
+    // Get posts scheduled for now (within last 5 minutes to account for cron timing)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     const now = new Date();
-    // Find all posts that are pending and scheduled <= now
-    const pendingPosts = await Post.find({
-      status: "pending",
-      scheduledTime: { $lte: now },
+    
+    const scheduledPosts = await Post.find({
+      scheduledTime: { $gte: fiveMinutesAgo, $lte: now },
+      published: false
     });
 
-    let successCount = 0;
-    for (const post of pendingPosts) {
+    console.log(`� Found ${scheduledPosts.length} posts to publish`);
+
+    console.log(`🔗 LinkedIn integration: OAuth routes available at /api/linkedin/*`);
+
+    const results = [];
+    
+    for (const post of scheduledPosts) {
       try {
-        // Simulate posting (replace with LinkedIn API call later)
-        console.log(`📤 Publishing: ${post.content} (Scheduled: ${post.scheduledTime})`);
+        console.log(`📤 Publishing: "${post.content.substring(0, 50)}..."`);
         
-        // TODO: Add actual LinkedIn API integration here
-        // await postToLinkedIn(post.content);
+        // For now, simulate posting (LinkedIn integration via Pages API routes)
+        console.log(`🎭 Simulating LinkedIn post - OAuth integration ready`);
         
-        // Mark as posted
-        post.status = "posted";
-        post.publishedAt = now;
+        // Mark as published
+        post.published = true;
+        post.publishedAt = new Date();
         await post.save();
-        successCount++;
-      } catch (postError) {
-        console.error(`❌ Failed to publish post ${post._id}:`, postError);
-        // Mark as failed but continue with other posts
-        post.status = "failed";
-        await post.save();
+        
+        console.log(`✅ Post marked as published (simulation mode)`);
+        
+        results.push({
+          id: post._id,
+          success: true,
+          linkedIn: 'simulated',
+          message: 'LinkedIn OAuth ready - simulation mode active'
+        });
+        
+      } catch (error) {
+        console.error(`❌ Failed to publish post ${post._id}:`, error);
+        results.push({
+          id: post._id,
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
       }
     }
 
-    console.log(`✅ Published ${successCount}/${pendingPosts.length} posts`);
-    return NextResponse.json({ 
-      success: true, 
-      postedCount: successCount,
-      totalFound: pendingPosts.length 
+    return NextResponse.json({
+      success: true,
+      publishedCount: results.filter(r => r.success).length,
+      totalFound: scheduledPosts.length,
+      linkedInOAuthReady: true,
+      results
     });
+
   } catch (error) {
-    console.error("❌ Publish API Error:", error);
+    console.error("❌ Publish endpoint error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to publish posts" },
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      },
       { status: 500 }
     );
   }
