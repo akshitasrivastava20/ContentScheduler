@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Configure for Cloudflare Pages with API routes
 };
 
 export default nextConfig;
