@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const LinkedinTokenSchema = new mongoose.Schema({
-  userId: {
+  linkedInId: {
     type: String,
     required: true,
-    default: 'default-user'
+    unique: true // Each LinkedIn user can only have one token
   },
   accessToken: {
     type: String,
@@ -24,15 +24,11 @@ const LinkedinTokenSchema = new mongoose.Schema({
   },
   userName: {
     type: String,
-    required: false
+    required: true
   },
   userEmail: {
     type: String,
-    required: false
-  },
-  linkedInId: {
-    type: String,
-    required: false
+    required: true
   }
 });
 

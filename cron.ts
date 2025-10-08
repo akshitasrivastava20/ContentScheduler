@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 // Get the base URL for the API calls
 const baseUrl = process.env.NODE_ENV === "production" 
-  ? process.env.VERCEL_URL || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ? "https://scheduler.akshita.xyz"
   : "http://localhost:3000";
 
 console.log("🚀 Content Scheduler Cron Job Started");

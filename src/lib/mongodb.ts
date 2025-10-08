@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 let isConnected = false;
 
-export const connectDB = async () => {
+const connectDB = async () => {
   if (isConnected) return;
 
   try {
@@ -22,3 +22,6 @@ export const connectDB = async () => {
     throw err; // Re-throw error so API routes can handle it
   }
 };
+
+export default connectDB;
+export { connectDB };
