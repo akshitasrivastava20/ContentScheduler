@@ -29,7 +29,6 @@
     "typescript": "^5"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.2",
     "tsx": "^4.20.6"
   }
 }
