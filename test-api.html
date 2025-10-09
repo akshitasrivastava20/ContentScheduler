@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing Schedule API</h1>
+    <button onclick="testScheduleAPI()">Test Schedule API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testScheduleAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch('/api/schedule', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: 'Test post from browser',
+                        scheduledTime: '2024-10-09T10:00:00.000Z'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h3>Response:</h3>
+                    <p>Status: ${response.status}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        // Test LinkedIn status API too
+        async function testLinkedInStatus() {
+            try {
+                const response = await fetch('/api/linkedin/status');
+                const data = await response.json();
+                console.log('LinkedIn Status:', data);
+            } catch (error) {
+                console.error('LinkedIn Status Error:', error);
+            }
+        }
+
+        // Test on page load
+        testLinkedInStatus();
+    </script>
+
+    <button onclick="testLinkedInStatus()">Test LinkedIn Status</button>
+</body>
+</html>
+</html>

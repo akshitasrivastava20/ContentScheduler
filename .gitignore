@@ -45,5 +45,3 @@ coverage/
 # Temporary folders
 tmp/
 temp/
-.vercel
-.env.production
